@@ -1,0 +1,118 @@
+query getChannels {
+  channels {
+    id
+    name
+    admin {
+      name
+    }
+    messages {
+      content
+      author{name}
+    }
+    users {
+      name
+    }
+  }
+}
+
+mutation addChannel {
+  createChannel(
+    data: {
+      name: "test"
+      private: false
+      admin: { connect: { id: "ck6yq632c00ni07221q8lyl2u" } }
+      users: { connect: { id: "ck6yq632c00ni07221q8lyl2u" } }
+    }
+  ) {
+    id
+    name
+    private
+    admin {
+      name
+    }
+  }
+}
+mutation joinChannel {
+  updateChannel(
+    where: { name: "test" }
+    data: { users: { connect: { email: "delete@mail" } } }
+  ) {
+    name
+    admin {
+      name
+    }
+    users {
+      name
+    }
+  }
+}
+
+mutation deleteChannel {
+  deleteChannel(where: {name: "test"}) {
+    name
+  }
+}
+
+query getusers {
+  users {
+    id
+    name
+    email
+    messages {
+      content
+    }
+    channels {
+      name
+    }
+    onChannels {
+      name
+    }
+  }
+}
+mutation addUser {
+  createUser(data: {name: "delete", email: "delete@mail"}) {name id}
+}
+
+mutation delUser {
+  deleteUser(where: {email: "delete@mail"}){name id}
+}
+
+query getMessages {
+  messages {
+    id
+    content
+    author {
+      name
+    }
+    Channel {
+      name
+    }
+  }
+}
+
+mutation addMessage {
+  createMessage(
+    data: {content: "testing", author: {connect: {email:"delete@mail"}},
+    Channel: {connect: {name: "test"}}, 
+      
+    }
+  ){
+    content
+    author {name}
+    Channel{name}
+    
+    
+  }
+}
+
+mutation delMessage {
+  deleteMessage(
+    where:{id: "ck6z2cqha01j10722pdht9fsr"}
+  ){content}
+}
+mutation updateMessage {
+  updateMessage(
+    where:{id: "ck6z27a5501e107221fedmj62"},
+    data: {content: "new content"}
+  ){content}
+}
