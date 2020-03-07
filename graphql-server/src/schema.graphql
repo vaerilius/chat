@@ -55,14 +55,12 @@ input CreateUserInput {
 input UpdateUserInput {
   name: String
   email: String
-  password: String
 }
 
 type User {
   id: ID!
   name: String!
   email: String
-  password: String!
   updatedAt: String!
   createdAt: String!
   messages: [Message!]!

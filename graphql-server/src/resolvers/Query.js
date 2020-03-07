@@ -2,7 +2,7 @@ import getUserId from '../utils/getUserId'
 
 const Query = {
   users(parent, args, { prisma, request }, info) {
-    // getUserId(request)
+    getUserId(request)
     const opArgs = {
       first: args.first,
       skip: args.skip,
