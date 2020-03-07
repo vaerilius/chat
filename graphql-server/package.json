@@ -1,5 +1,5 @@
 {
-  "name": "graphql-basics",
+  "name": "chat-application",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -41,7 +41,7 @@
     "core-js": "^3.6.4",
     "cross-fetch": "^3.0.4",
     "env-cmd": "^10.1.0",
-    "graphql": "^0.13.2",
+    "graphql": "^14.0.2",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
@@ -52,5 +52,8 @@
     "@babel/plugin-transform-runtime": "^7.8.3",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2"
+  },
+  "resolutions": {
+    "type-graphql/graphql": "^14.0.2"
   }
 }

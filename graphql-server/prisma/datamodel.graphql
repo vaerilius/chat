@@ -5,4 +5,28 @@ type User {
   password: String!
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
+  messages: [Message!]! @relation(name: "MessageToUser", onDelete: CASCADE)
+  userChannels: [Channel!]! @relation(name: "ChannelToUser", onDelete: SET_NULL)
+  onChannels: [Channel!]! @relation(name: "UserToChannel", onDelete: SET_NULL)
+  likes: [Message!]! @relation(name: "MessageLikesToUser", onDelete: CASCADE)
+}
+
+type Message {
+  id: ID! @id
+  content: String!
+  author: User! @relation(name: "MessageToUser", onDelete: SET_NULL)
+  channel: Channel! @relation(name: "ChannelToMessage", onDelete: SET_NULL)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
+  likes: [User!]! @relation(name: "MessageLikesToUser", onDelete: SET_NULL)
+}
+
+type Channel {
+  id: ID! @id
+  name: String!
+  author: User! @relation(name: "ChannelToUser", onDelete: SET_NULL)
+  users: [User!]! @relation(name: "UserToChannel", onDelete: SET_NULL)
+  messages: [Message!]! @relation(name: "ChannelToMessage", onDelete: CASCADE)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
