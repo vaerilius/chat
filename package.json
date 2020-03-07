@@ -1,0 +1,56 @@
+{
+  "name": "graphql-basics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "watch": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand",
+    "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
+    "prisma-deploy:dev": "cd prisma && prisma deploy -e ../config/dev.env",
+    "prisma-deploy:prod": "cd prisma && prisma deploy -e ../config/prod.env",
+    "prisma-deploy:test": "cd prisma && prisma deploy -e ../config/test.env"
+  },
+  "jest": {
+    "globalSetup": "./tests/jest/globalSetup.js",
+    "globalTeardown": "./tests/jest/globalTearDown.js"
+  },
+  "author": "Timo Tamminen",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "@babel/runtime": "^7.8.7",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-client": "^2.4.2",
+    "apollo-link": "^1.2.3",
+    "apollo-link-error": "^1.1.1",
+    "apollo-link-http": "^1.5.5",
+    "apollo-link-ws": "^1.0.9",
+    "apollo-utilities": "^1.0.21",
+    "babel-node": "^0.0.1-security",
+    "bcryptjs": "^2.4.3",
+    "core-js": "^3.6.4",
+    "cross-fetch": "^3.0.4",
+    "env-cmd": "^10.1.0",
+    "graphql": "^0.13.2",
+    "graphql-cli": "^3.0.14",
+    "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^8.5.1",
+    "prisma-binding": "^2.3.16",
+    "subscriptions-transport-ws": "^0.9.15"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
