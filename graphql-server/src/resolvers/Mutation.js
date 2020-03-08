@@ -53,6 +53,36 @@ const Mutation = {
       { where: { id: userId }, data: args.data },
       info
     )
+  },
+  async createChannel(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request)
+
+    const channelExists = await prisma.exists.Channel({
+      name: args.data.name
+    })
+
+    if (channelExists) {
+      throw new Error('Channel name must be unique')
+    }
+
+    return prisma.mutation.createChannel(
+      {
+        data: {
+          name: args.data.name,
+          author: {
+            connect: {
+              id: userId
+            }
+          },
+          users: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      info
+    )
   }
 }
 

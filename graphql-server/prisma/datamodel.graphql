@@ -23,7 +23,7 @@ type Message {
 
 type Channel {
   id: ID! @id
-  name: String!
+  name: String! @unique
   author: User! @relation(name: "ChannelToUser", onDelete: SET_NULL)
   users: [User!]! @relation(name: "UserToChannel", onDelete: SET_NULL)
   messages: [Message!]! @relation(name: "ChannelToMessage", onDelete: CASCADE)
