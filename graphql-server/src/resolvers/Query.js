@@ -1,7 +1,7 @@
 import getUserId from '../utils/getUserId'
 
 const Query = {
-  users(parent, args, { prisma, request }, info) {
+  async users(parent, args, { prisma, request }, info) {
     getUserId(request)
     const opArgs = {
       first: args.first,
@@ -14,13 +14,13 @@ const Query = {
       opArgs.where = {
         OR: [
           {
-            name_contains: args.query
+            name_contains: args.query.toLowerCase()
           }
         ]
       }
     }
 
-    return prisma.query.users(opArgs, info)
+    return await prisma.query.users(opArgs, info)
   },
   channels(parent, args, { prisma, request }, info) {
     // getUserId(request)

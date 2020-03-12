@@ -1,4 +1,4 @@
-# import UserOrderByInput ChannelOrderByInput, MessageOrderByInput from './generated/prisma.graphql'
+# import UserOrderByInput, UserWhereUniqueInput, ChannelOrderByInput, MessageOrderByInput from './generated/prisma.graphql'
 
 type Query {
   users(
@@ -31,6 +31,7 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User!
   login(data: LoginUserInput!): AuthPayload!
   createChannel(data: CreateChannelInput!): Channel!
+  updateChannelName(id: String!, data: UpdateChannelInput): Channel!
 }
 
 # type Subscription {
@@ -60,6 +61,9 @@ input UpdateUserInput {
 
 input CreateChannelInput {
   name: String!
+}
+input UpdateChannelInput {
+  name: String
 }
 
 type User {

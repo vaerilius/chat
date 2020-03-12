@@ -7,7 +7,7 @@ type User {
   createdAt: DateTime! @createdAt
   messages: [Message!]! @relation(name: "MessageToUser", onDelete: CASCADE)
   userChannels: [Channel!]! @relation(name: "ChannelToUser", onDelete: SET_NULL)
-  onChannels: [Channel!]! @relation(name: "UserToChannel", onDelete: SET_NULL)
+  onChannels: [Channel!]! @relation(name: "UserToChannel", onDelete: CASCADE)
   likes: [Message!]! @relation(name: "MessageLikesToUser", onDelete: CASCADE)
 }
 

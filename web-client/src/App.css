@@ -3,8 +3,16 @@
 }
 
 .App-logo {
-  height: 0vmin;
-  pointer-events: none;
+  /* height: 50vmin; */
+  /* pointer-events: none; */
+  padding: 2rem;
+  border: 1px solid red;
+  border-radius: 50%;
+  box-shadow: 0 2px 20px #777;
+  text-shadow: 0px 1px 2px darkred;
+}
+.App-logo:hover {
+  animation: click 400ms ease;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -29,10 +37,31 @@
 }
 
 @keyframes App-logo-spin {
+  0% {
+    transform: rotate(0deg) scale(1) translateY(0);
+    color: white;
+    border-color: darkred;
+    text-shadow: 0px 1px 2px darkred;
+  }
+  50% {
+    transform: rotate(360deg) scale(2) translateY(100%);
+    color: darkred;
+    border-color: white;
+    text-shadow: 0px 1px 2px white;
+  }
+  100% {
+    transform: rotate(360deg) scale(1) translateY(0);
+    color: white;
+    border-color: darkred;
+    text-shadow: 0px 1px 2px darkred;
+  }
+}
+
+@keyframes click {
   from {
-    transform: rotate(0deg);
+    transform: scale(0.5);
   }
   to {
-    transform: rotate(360deg);
+    transform: scale(1);
   }
 }

@@ -32,11 +32,11 @@ export const loginUser = () => {
       }
     }
     const { data } = await client.mutate({ mutation: login, variables })
-    console.log(data.login)
-
+    console.log(data)
+    window.localStorage.setItem('token', JSON.stringify(data.login))
     dispatch({
       type: 'LOGIN_USER',
-      user: data.login.user
+      user: data.login
     })
   }
 }
