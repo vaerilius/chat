@@ -23,7 +23,7 @@ const Query = {
     return await prisma.query.users(opArgs, info)
   },
   channels(parent, args, { prisma, request }, info) {
-    // getUserId(request)
+    getUserId(request)
     const opArgs = {
       first: args.first,
       skip: args.skip,
@@ -55,6 +55,8 @@ const Query = {
   },
   me(parent, args, { prisma, request }, info) {
     const userId = getUserId(request)
+
+    console.log(userId)
 
     return prisma.query.user({ where: { id: userId } }, info)
   }

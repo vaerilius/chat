@@ -1,5 +1,5 @@
 # source: http://localhost:4466/chat/dev
-# timestamp: Sun Mar 08 2020 12:20:58 GMT+0200 (Eastern European Standard Time)
+# timestamp: Fri Mar 13 2020 12:23:32 GMT+0200 (Eastern European Standard Time)
 
 type AggregateChannel {
   count: Int!
@@ -21,7 +21,9 @@ type BatchPayload {
 type Channel implements Node {
   id: ID!
   name: String!
-  author: User!
+  picture: String
+  description: String
+  admins(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   updatedAt: DateTime!
@@ -41,13 +43,15 @@ type ChannelConnection {
 input ChannelCreateInput {
   id: ID
   name: String!
-  author: UserCreateOneWithoutUserChannelsInput!
-  users: UserCreateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  admins: UserCreateManyWithoutAdminOnChannelsInput
+  users: UserCreateManyWithoutUserOnChannelsInput
   messages: MessageCreateManyWithoutChannelInput
 }
 
-input ChannelCreateManyWithoutAuthorInput {
-  create: [ChannelCreateWithoutAuthorInput!]
+input ChannelCreateManyWithoutAdminsInput {
+  create: [ChannelCreateWithoutAdminsInput!]
   connect: [ChannelWhereUniqueInput!]
 }
 
@@ -61,24 +65,30 @@ input ChannelCreateOneWithoutMessagesInput {
   connect: ChannelWhereUniqueInput
 }
 
-input ChannelCreateWithoutAuthorInput {
+input ChannelCreateWithoutAdminsInput {
   id: ID
   name: String!
-  users: UserCreateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  users: UserCreateManyWithoutUserOnChannelsInput
   messages: MessageCreateManyWithoutChannelInput
 }
 
 input ChannelCreateWithoutMessagesInput {
   id: ID
   name: String!
-  author: UserCreateOneWithoutUserChannelsInput!
-  users: UserCreateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  admins: UserCreateManyWithoutAdminOnChannelsInput
+  users: UserCreateManyWithoutUserOnChannelsInput
 }
 
 input ChannelCreateWithoutUsersInput {
   id: ID
   name: String!
-  author: UserCreateOneWithoutUserChannelsInput!
+  picture: String
+  description: String
+  admins: UserCreateManyWithoutAdminOnChannelsInput
   messages: MessageCreateManyWithoutChannelInput
 }
 
@@ -96,6 +106,10 @@ enum ChannelOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  picture_ASC
+  picture_DESC
+  description_ASC
+  description_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -105,6 +119,8 @@ enum ChannelOrderByInput {
 type ChannelPreviousValues {
   id: ID!
   name: String!
+  picture: String
+  description: String
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -198,6 +214,86 @@ input ChannelScalarWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -283,29 +379,35 @@ input ChannelSubscriptionWhereInput {
 
 input ChannelUpdateInput {
   name: String
-  author: UserUpdateOneRequiredWithoutUserChannelsInput
-  users: UserUpdateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  admins: UserUpdateManyWithoutAdminOnChannelsInput
+  users: UserUpdateManyWithoutUserOnChannelsInput
   messages: MessageUpdateManyWithoutChannelInput
 }
 
 input ChannelUpdateManyDataInput {
   name: String
+  picture: String
+  description: String
 }
 
 input ChannelUpdateManyMutationInput {
   name: String
+  picture: String
+  description: String
 }
 
-input ChannelUpdateManyWithoutAuthorInput {
-  create: [ChannelCreateWithoutAuthorInput!]
+input ChannelUpdateManyWithoutAdminsInput {
+  create: [ChannelCreateWithoutAdminsInput!]
   connect: [ChannelWhereUniqueInput!]
   set: [ChannelWhereUniqueInput!]
   disconnect: [ChannelWhereUniqueInput!]
   delete: [ChannelWhereUniqueInput!]
-  update: [ChannelUpdateWithWhereUniqueWithoutAuthorInput!]
+  update: [ChannelUpdateWithWhereUniqueWithoutAdminsInput!]
   updateMany: [ChannelUpdateManyWithWhereNestedInput!]
   deleteMany: [ChannelScalarWhereInput!]
-  upsert: [ChannelUpsertWithWhereUniqueWithoutAuthorInput!]
+  upsert: [ChannelUpsertWithWhereUniqueWithoutAdminsInput!]
 }
 
 input ChannelUpdateManyWithoutUsersInput {
@@ -332,27 +434,33 @@ input ChannelUpdateOneRequiredWithoutMessagesInput {
   upsert: ChannelUpsertWithoutMessagesInput
 }
 
-input ChannelUpdateWithoutAuthorDataInput {
+input ChannelUpdateWithoutAdminsDataInput {
   name: String
-  users: UserUpdateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  users: UserUpdateManyWithoutUserOnChannelsInput
   messages: MessageUpdateManyWithoutChannelInput
 }
 
 input ChannelUpdateWithoutMessagesDataInput {
   name: String
-  author: UserUpdateOneRequiredWithoutUserChannelsInput
-  users: UserUpdateManyWithoutOnChannelsInput
+  picture: String
+  description: String
+  admins: UserUpdateManyWithoutAdminOnChannelsInput
+  users: UserUpdateManyWithoutUserOnChannelsInput
 }
 
 input ChannelUpdateWithoutUsersDataInput {
   name: String
-  author: UserUpdateOneRequiredWithoutUserChannelsInput
+  picture: String
+  description: String
+  admins: UserUpdateManyWithoutAdminOnChannelsInput
   messages: MessageUpdateManyWithoutChannelInput
 }
 
-input ChannelUpdateWithWhereUniqueWithoutAuthorInput {
+input ChannelUpdateWithWhereUniqueWithoutAdminsInput {
   where: ChannelWhereUniqueInput!
-  data: ChannelUpdateWithoutAuthorDataInput!
+  data: ChannelUpdateWithoutAdminsDataInput!
 }
 
 input ChannelUpdateWithWhereUniqueWithoutUsersInput {
@@ -365,10 +473,10 @@ input ChannelUpsertWithoutMessagesInput {
   create: ChannelCreateWithoutMessagesInput!
 }
 
-input ChannelUpsertWithWhereUniqueWithoutAuthorInput {
+input ChannelUpsertWithWhereUniqueWithoutAdminsInput {
   where: ChannelWhereUniqueInput!
-  update: ChannelUpdateWithoutAuthorDataInput!
-  create: ChannelCreateWithoutAuthorInput!
+  update: ChannelUpdateWithoutAdminsDataInput!
+  create: ChannelCreateWithoutAdminsInput!
 }
 
 input ChannelUpsertWithWhereUniqueWithoutUsersInput {
@@ -466,6 +574,86 @@ input ChannelWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -510,7 +698,9 @@ input ChannelWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
-  author: UserWhereInput
+  admins_every: UserWhereInput
+  admins_some: UserWhereInput
+  admins_none: UserWhereInput
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput
@@ -538,6 +728,7 @@ scalar Long
 type Message implements Node {
   id: ID!
   content: String!
+  picture: String
   author: User!
   channel: Channel!
   updatedAt: DateTime!
@@ -558,6 +749,7 @@ type MessageConnection {
 input MessageCreateInput {
   id: ID
   content: String!
+  picture: String
   author: UserCreateOneWithoutMessagesInput!
   channel: ChannelCreateOneWithoutMessagesInput!
   likes: UserCreateManyWithoutLikesInput
@@ -581,6 +773,7 @@ input MessageCreateManyWithoutLikesInput {
 input MessageCreateWithoutAuthorInput {
   id: ID
   content: String!
+  picture: String
   channel: ChannelCreateOneWithoutMessagesInput!
   likes: UserCreateManyWithoutLikesInput
 }
@@ -588,6 +781,7 @@ input MessageCreateWithoutAuthorInput {
 input MessageCreateWithoutChannelInput {
   id: ID
   content: String!
+  picture: String
   author: UserCreateOneWithoutMessagesInput!
   likes: UserCreateManyWithoutLikesInput
 }
@@ -595,6 +789,7 @@ input MessageCreateWithoutChannelInput {
 input MessageCreateWithoutLikesInput {
   id: ID
   content: String!
+  picture: String
   author: UserCreateOneWithoutMessagesInput!
   channel: ChannelCreateOneWithoutMessagesInput!
 }
@@ -613,6 +808,8 @@ enum MessageOrderByInput {
   id_DESC
   content_ASC
   content_DESC
+  picture_ASC
+  picture_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -622,6 +819,7 @@ enum MessageOrderByInput {
 type MessagePreviousValues {
   id: ID!
   content: String!
+  picture: String
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -715,6 +913,46 @@ input MessageScalarWhereInput {
 
   """All values not ending with the given string."""
   content_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -800,6 +1038,7 @@ input MessageSubscriptionWhereInput {
 
 input MessageUpdateInput {
   content: String
+  picture: String
   author: UserUpdateOneRequiredWithoutMessagesInput
   channel: ChannelUpdateOneRequiredWithoutMessagesInput
   likes: UserUpdateManyWithoutLikesInput
@@ -807,10 +1046,12 @@ input MessageUpdateInput {
 
 input MessageUpdateManyDataInput {
   content: String
+  picture: String
 }
 
 input MessageUpdateManyMutationInput {
   content: String
+  picture: String
 }
 
 input MessageUpdateManyWithoutAuthorInput {
@@ -856,18 +1097,21 @@ input MessageUpdateManyWithWhereNestedInput {
 
 input MessageUpdateWithoutAuthorDataInput {
   content: String
+  picture: String
   channel: ChannelUpdateOneRequiredWithoutMessagesInput
   likes: UserUpdateManyWithoutLikesInput
 }
 
 input MessageUpdateWithoutChannelDataInput {
   content: String
+  picture: String
   author: UserUpdateOneRequiredWithoutMessagesInput
   likes: UserUpdateManyWithoutLikesInput
 }
 
 input MessageUpdateWithoutLikesDataInput {
   content: String
+  picture: String
   author: UserUpdateOneRequiredWithoutMessagesInput
   channel: ChannelUpdateOneRequiredWithoutMessagesInput
 }
@@ -994,6 +1238,46 @@ input MessageWhereInput {
 
   """All values not ending with the given string."""
   content_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1130,12 +1414,13 @@ type User implements Node {
   id: ID!
   name: String!
   email: String!
+  picture: String
   password: String!
   updatedAt: DateTime!
   createdAt: DateTime!
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
-  userChannels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel!]
-  onChannels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel!]
+  adminOnChannels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel!]
+  userOnChannels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel!]
   likes(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
@@ -1153,11 +1438,17 @@ input UserCreateInput {
   id: ID
   name: String!
   email: String!
+  picture: String
   password: String!
   messages: MessageCreateManyWithoutAuthorInput
-  userChannels: ChannelCreateManyWithoutAuthorInput
-  onChannels: ChannelCreateManyWithoutUsersInput
+  adminOnChannels: ChannelCreateManyWithoutAdminsInput
+  userOnChannels: ChannelCreateManyWithoutUsersInput
   likes: MessageCreateManyWithoutLikesInput
+}
+
+input UserCreateManyWithoutAdminOnChannelsInput {
+  create: [UserCreateWithoutAdminOnChannelsInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutLikesInput {
@@ -1165,8 +1456,8 @@ input UserCreateManyWithoutLikesInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateManyWithoutOnChannelsInput {
-  create: [UserCreateWithoutOnChannelsInput!]
+input UserCreateManyWithoutUserOnChannelsInput {
+  create: [UserCreateWithoutUserOnChannelsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -1175,48 +1466,47 @@ input UserCreateOneWithoutMessagesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutUserChannelsInput {
-  create: UserCreateWithoutUserChannelsInput
-  connect: UserWhereUniqueInput
+input UserCreateWithoutAdminOnChannelsInput {
+  id: ID
+  name: String!
+  email: String!
+  picture: String
+  password: String!
+  messages: MessageCreateManyWithoutAuthorInput
+  userOnChannels: ChannelCreateManyWithoutUsersInput
+  likes: MessageCreateManyWithoutLikesInput
 }
 
 input UserCreateWithoutLikesInput {
   id: ID
   name: String!
   email: String!
+  picture: String
   password: String!
   messages: MessageCreateManyWithoutAuthorInput
-  userChannels: ChannelCreateManyWithoutAuthorInput
-  onChannels: ChannelCreateManyWithoutUsersInput
+  adminOnChannels: ChannelCreateManyWithoutAdminsInput
+  userOnChannels: ChannelCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutMessagesInput {
   id: ID
   name: String!
   email: String!
+  picture: String
   password: String!
-  userChannels: ChannelCreateManyWithoutAuthorInput
-  onChannels: ChannelCreateManyWithoutUsersInput
+  adminOnChannels: ChannelCreateManyWithoutAdminsInput
+  userOnChannels: ChannelCreateManyWithoutUsersInput
   likes: MessageCreateManyWithoutLikesInput
 }
 
-input UserCreateWithoutOnChannelsInput {
+input UserCreateWithoutUserOnChannelsInput {
   id: ID
   name: String!
   email: String!
+  picture: String
   password: String!
   messages: MessageCreateManyWithoutAuthorInput
-  userChannels: ChannelCreateManyWithoutAuthorInput
-  likes: MessageCreateManyWithoutLikesInput
-}
-
-input UserCreateWithoutUserChannelsInput {
-  id: ID
-  name: String!
-  email: String!
-  password: String!
-  messages: MessageCreateManyWithoutAuthorInput
-  onChannels: ChannelCreateManyWithoutUsersInput
+  adminOnChannels: ChannelCreateManyWithoutAdminsInput
   likes: MessageCreateManyWithoutLikesInput
 }
 
@@ -1236,6 +1526,8 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
+  picture_ASC
+  picture_DESC
   password_ASC
   password_DESC
   updatedAt_ASC
@@ -1248,6 +1540,7 @@ type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
+  picture: String
   password: String!
   updatedAt: DateTime!
   createdAt: DateTime!
@@ -1382,6 +1675,46 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
   password: String
 
   """All values that are not equal to given value."""
@@ -1508,23 +1841,38 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   name: String
   email: String
+  picture: String
   password: String
   messages: MessageUpdateManyWithoutAuthorInput
-  userChannels: ChannelUpdateManyWithoutAuthorInput
-  onChannels: ChannelUpdateManyWithoutUsersInput
+  adminOnChannels: ChannelUpdateManyWithoutAdminsInput
+  userOnChannels: ChannelUpdateManyWithoutUsersInput
   likes: MessageUpdateManyWithoutLikesInput
 }
 
 input UserUpdateManyDataInput {
   name: String
   email: String
+  picture: String
   password: String
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
+  picture: String
   password: String
+}
+
+input UserUpdateManyWithoutAdminOnChannelsInput {
+  create: [UserCreateWithoutAdminOnChannelsInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutAdminOnChannelsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutAdminOnChannelsInput!]
 }
 
 input UserUpdateManyWithoutLikesInput {
@@ -1539,16 +1887,16 @@ input UserUpdateManyWithoutLikesInput {
   upsert: [UserUpsertWithWhereUniqueWithoutLikesInput!]
 }
 
-input UserUpdateManyWithoutOnChannelsInput {
-  create: [UserCreateWithoutOnChannelsInput!]
+input UserUpdateManyWithoutUserOnChannelsInput {
+  create: [UserCreateWithoutUserOnChannelsInput!]
   connect: [UserWhereUniqueInput!]
   set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutOnChannelsInput!]
+  update: [UserUpdateWithWhereUniqueWithoutUserOnChannelsInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
   deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutOnChannelsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutUserOnChannelsInput!]
 }
 
 input UserUpdateManyWithWhereNestedInput {
@@ -1563,47 +1911,49 @@ input UserUpdateOneRequiredWithoutMessagesInput {
   upsert: UserUpsertWithoutMessagesInput
 }
 
-input UserUpdateOneRequiredWithoutUserChannelsInput {
-  create: UserCreateWithoutUserChannelsInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutUserChannelsDataInput
-  upsert: UserUpsertWithoutUserChannelsInput
+input UserUpdateWithoutAdminOnChannelsDataInput {
+  name: String
+  email: String
+  picture: String
+  password: String
+  messages: MessageUpdateManyWithoutAuthorInput
+  userOnChannels: ChannelUpdateManyWithoutUsersInput
+  likes: MessageUpdateManyWithoutLikesInput
 }
 
 input UserUpdateWithoutLikesDataInput {
   name: String
   email: String
+  picture: String
   password: String
   messages: MessageUpdateManyWithoutAuthorInput
-  userChannels: ChannelUpdateManyWithoutAuthorInput
-  onChannels: ChannelUpdateManyWithoutUsersInput
+  adminOnChannels: ChannelUpdateManyWithoutAdminsInput
+  userOnChannels: ChannelUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutMessagesDataInput {
   name: String
   email: String
+  picture: String
   password: String
-  userChannels: ChannelUpdateManyWithoutAuthorInput
-  onChannels: ChannelUpdateManyWithoutUsersInput
+  adminOnChannels: ChannelUpdateManyWithoutAdminsInput
+  userOnChannels: ChannelUpdateManyWithoutUsersInput
   likes: MessageUpdateManyWithoutLikesInput
 }
 
-input UserUpdateWithoutOnChannelsDataInput {
+input UserUpdateWithoutUserOnChannelsDataInput {
   name: String
   email: String
+  picture: String
   password: String
   messages: MessageUpdateManyWithoutAuthorInput
-  userChannels: ChannelUpdateManyWithoutAuthorInput
+  adminOnChannels: ChannelUpdateManyWithoutAdminsInput
   likes: MessageUpdateManyWithoutLikesInput
 }
 
-input UserUpdateWithoutUserChannelsDataInput {
-  name: String
-  email: String
-  password: String
-  messages: MessageUpdateManyWithoutAuthorInput
-  onChannels: ChannelUpdateManyWithoutUsersInput
-  likes: MessageUpdateManyWithoutLikesInput
+input UserUpdateWithWhereUniqueWithoutAdminOnChannelsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutAdminOnChannelsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutLikesInput {
@@ -1611,9 +1961,9 @@ input UserUpdateWithWhereUniqueWithoutLikesInput {
   data: UserUpdateWithoutLikesDataInput!
 }
 
-input UserUpdateWithWhereUniqueWithoutOnChannelsInput {
+input UserUpdateWithWhereUniqueWithoutUserOnChannelsInput {
   where: UserWhereUniqueInput!
-  data: UserUpdateWithoutOnChannelsDataInput!
+  data: UserUpdateWithoutUserOnChannelsDataInput!
 }
 
 input UserUpsertWithoutMessagesInput {
@@ -1621,9 +1971,10 @@ input UserUpsertWithoutMessagesInput {
   create: UserCreateWithoutMessagesInput!
 }
 
-input UserUpsertWithoutUserChannelsInput {
-  update: UserUpdateWithoutUserChannelsDataInput!
-  create: UserCreateWithoutUserChannelsInput!
+input UserUpsertWithWhereUniqueWithoutAdminOnChannelsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutAdminOnChannelsDataInput!
+  create: UserCreateWithoutAdminOnChannelsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutLikesInput {
@@ -1632,10 +1983,10 @@ input UserUpsertWithWhereUniqueWithoutLikesInput {
   create: UserCreateWithoutLikesInput!
 }
 
-input UserUpsertWithWhereUniqueWithoutOnChannelsInput {
+input UserUpsertWithWhereUniqueWithoutUserOnChannelsInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateWithoutOnChannelsDataInput!
-  create: UserCreateWithoutOnChannelsInput!
+  update: UserUpdateWithoutUserOnChannelsDataInput!
+  create: UserCreateWithoutUserOnChannelsInput!
 }
 
 input UserWhereInput {
@@ -1767,6 +2118,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
   password: String
 
   """All values that are not equal to given value."""
@@ -1854,12 +2245,12 @@ input UserWhereInput {
   messages_every: MessageWhereInput
   messages_some: MessageWhereInput
   messages_none: MessageWhereInput
-  userChannels_every: ChannelWhereInput
-  userChannels_some: ChannelWhereInput
-  userChannels_none: ChannelWhereInput
-  onChannels_every: ChannelWhereInput
-  onChannels_some: ChannelWhereInput
-  onChannels_none: ChannelWhereInput
+  adminOnChannels_every: ChannelWhereInput
+  adminOnChannels_some: ChannelWhereInput
+  adminOnChannels_none: ChannelWhereInput
+  userOnChannels_every: ChannelWhereInput
+  userOnChannels_some: ChannelWhereInput
+  userOnChannels_none: ChannelWhereInput
   likes_every: MessageWhereInput
   likes_some: MessageWhereInput
   likes_none: MessageWhereInput

@@ -31,7 +31,8 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User!
   login(data: LoginUserInput!): AuthPayload!
   createChannel(data: CreateChannelInput!): Channel!
-  updateChannelName(id: String!, data: UpdateChannelInput): Channel!
+  connectToChannel(name: String!): Channel!
+  disconnectToChannel(name: String!): Channel!
 }
 
 # type Subscription {
@@ -52,36 +53,43 @@ input CreateUserInput {
   name: String!
   email: String!
   password: String!
+  picture: String
 }
 
 input UpdateUserInput {
   name: String
   email: String
+  picture: String
 }
 
 input CreateChannelInput {
   name: String!
+  description: String
 }
 input UpdateChannelInput {
   name: String
+  description: String
 }
 
 type User {
   id: ID!
   name: String!
   email: String
+  picture: String
   updatedAt: String!
   createdAt: String!
   messages: [Message!]!
-  userChannels: [Channel!]!
-  onChannels: [Channel!]!
+  adminOnChannels: [Channel!]!
+  userOnChannels: [Channel!]!
   likes: [Message!]!
 }
 
 type Channel {
   id: ID!
   name: String!
-  author: User!
+  picture: String
+  description: String
+  admins: [User!]!
   users: [User!]!
   messages: [Message!]!
   updatedAt: DateTime!
@@ -90,6 +98,7 @@ type Channel {
 type Message {
   id: ID!
   content: String!
+  picture: String
   author: User!
   channel: Channel!
   updatedAt: DateTime!
